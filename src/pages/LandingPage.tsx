@@ -1,7 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Home, Search, CheckCircle, Users, Shield, ArrowRight, Building2, MapPin, TrendingUp } from 'lucide-react';
-import { supabase } from '../lib/supabase';
-import { PropertyCard } from '../components/PropertyCard';
+import { useState, useEffect } from "react";
+import {
+  Home,
+  Search,
+  CheckCircle,
+  Users,
+  Shield,
+  ArrowRight,
+  Building2,
+  MapPin,
+  TrendingUp,
+} from "lucide-react";
+import { supabase } from "../lib/supabase";
+import { PropertyCard } from "../components/PropertyCard";
 
 interface LandingPageProps {
   onLogin: () => void;
@@ -9,7 +19,11 @@ interface LandingPageProps {
   onViewProperty: (property: any) => void;
 }
 
-export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPageProps) => {
+export const LandingPage = ({
+  onLogin,
+  onSignup,
+  onViewProperty,
+}: LandingPageProps) => {
   const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -19,15 +33,38 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
 
   const fetchFeaturedProperties = async () => {
     try {
-      const { data } = await supabase
-        .from('properties')
-        .select('*')
-        .is('deleted_at', null)
-        .order('created_at', { ascending: false })
+      const { data, error } = await supabase
+        .from("properties")
+        .select("*")
+        .is("deleted_at", null)
+        .order("created_at", { ascending: false })
         .limit(6);
-      setFeaturedProperties(data || []);
+
+      if (error) {
+        console.warn(
+          "Could not fetch properties for landing page:",
+          error.message
+        );
+        // If it's a 401/403 error, just continue without properties
+        if (
+          error.message.includes("401") ||
+          error.message.includes("403") ||
+          error.message.includes("JWT")
+        ) {
+          console.log(
+            "🔒 Properties require authentication - showing landing page without featured properties"
+          );
+          setFeaturedProperties([]);
+        } else {
+          throw error;
+        }
+      } else {
+        setFeaturedProperties(data || []);
+      }
     } catch (error) {
-      console.error('Error fetching properties:', error);
+      console.error("Error fetching properties:", error);
+      // Gracefully handle errors by showing landing page without properties
+      setFeaturedProperties([]);
     } finally {
       setLoading(false);
     }
@@ -43,7 +80,9 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                 <Home className="w-7 h-7 text-white" />
               </div>
               <div>
-                <h1 className="text-2xl font-bold text-gray-900">Shree Krishna Properties</h1>
+                <h1 className="text-2xl font-bold text-gray-900">
+                  Shree Krishna Properties
+                </h1>
                 <p className="text-xs text-gray-600">Your Dream Home Awaits</p>
               </div>
             </div>
@@ -78,7 +117,8 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                 <span className="block text-blue-600">Property Today</span>
               </h1>
               <p className="text-xl text-gray-600 leading-relaxed">
-                Discover premium properties for rent and sale across prime locations. Your dream home is just a click away.
+                Discover premium properties for rent and sale across prime
+                locations. Your dream home is just a click away.
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
@@ -105,8 +145,12 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                     <CheckCircle className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">Verified Properties</p>
-                    <p className="text-sm text-gray-600">100% Authentic Listings</p>
+                    <p className="font-bold text-gray-900">
+                      Verified Properties
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      100% Authentic Listings
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-blue-50 rounded-xl">
@@ -115,7 +159,9 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                   </div>
                   <div>
                     <p className="font-bold text-gray-900">Expert Support</p>
-                    <p className="text-sm text-gray-600">Dedicated Team Available</p>
+                    <p className="text-sm text-gray-600">
+                      Dedicated Team Available
+                    </p>
                   </div>
                 </div>
                 <div className="flex items-center gap-4 p-4 bg-orange-50 rounded-xl">
@@ -123,8 +169,12 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                     <Shield className="w-6 h-6 text-white" />
                   </div>
                   <div>
-                    <p className="font-bold text-gray-900">Secure Transactions</p>
-                    <p className="text-sm text-gray-600">Protected & Transparent</p>
+                    <p className="font-bold text-gray-900">
+                      Secure Transactions
+                    </p>
+                    <p className="text-sm text-gray-600">
+                      Protected & Transparent
+                    </p>
                   </div>
                 </div>
               </div>
@@ -136,35 +186,48 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
       <section className="py-20 px-4 bg-white">
         <div className="max-w-7xl mx-auto">
           <div className="text-center mb-12">
-            <h2 className="text-4xl font-bold text-gray-900 mb-4">Why Choose Us?</h2>
-            <p className="text-xl text-gray-600">Everything you need to find your perfect property</p>
+            <h2 className="text-4xl font-bold text-gray-900 mb-4">
+              Why Choose Us?
+            </h2>
+            <p className="text-xl text-gray-600">
+              Everything you need to find your perfect property
+            </p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="bg-gradient-to-br from-blue-50 to-white p-8 rounded-2xl border border-blue-100 hover:shadow-xl transition-shadow">
               <div className="bg-blue-600 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                 <Building2 className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Wide Selection</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Wide Selection
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Browse through hundreds of verified properties including plots, kothis, apartments, and commercial spaces.
+                Browse through hundreds of verified properties including plots,
+                kothis, apartments, and commercial spaces.
               </p>
             </div>
             <div className="bg-gradient-to-br from-green-50 to-white p-8 rounded-2xl border border-green-100 hover:shadow-xl transition-shadow">
               <div className="bg-green-600 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                 <MapPin className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Prime Locations</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Prime Locations
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Properties in the most sought-after areas with excellent connectivity and amenities.
+                Properties in the most sought-after areas with excellent
+                connectivity and amenities.
               </p>
             </div>
             <div className="bg-gradient-to-br from-orange-50 to-white p-8 rounded-2xl border border-orange-100 hover:shadow-xl transition-shadow">
               <div className="bg-orange-600 w-14 h-14 rounded-xl flex items-center justify-center mb-6">
                 <Shield className="w-7 h-7 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 mb-3">Trusted Service</h3>
+              <h3 className="text-2xl font-bold text-gray-900 mb-3">
+                Trusted Service
+              </h3>
               <p className="text-gray-600 leading-relaxed">
-                Years of experience ensuring smooth and transparent property transactions.
+                Years of experience ensuring smooth and transparent property
+                transactions.
               </p>
             </div>
           </div>
@@ -175,8 +238,12 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
         <section className="py-20 px-4 bg-gray-50">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-12">
-              <h2 className="text-4xl font-bold text-gray-900 mb-4">Featured Properties</h2>
-              <p className="text-xl text-gray-600">Handpicked properties just for you</p>
+              <h2 className="text-4xl font-bold text-gray-900 mb-4">
+                Featured Properties
+              </h2>
+              <p className="text-xl text-gray-600">
+                Handpicked properties just for you
+              </p>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {featuredProperties.map((property) => (
@@ -202,9 +269,12 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
 
       <section className="py-20 px-4 bg-gradient-to-br from-blue-600 to-blue-700 text-white">
         <div className="max-w-4xl mx-auto text-center space-y-8">
-          <h2 className="text-4xl lg:text-5xl font-bold">Ready to Find Your Dream Property?</h2>
+          <h2 className="text-4xl lg:text-5xl font-bold">
+            Ready to Find Your Dream Property?
+          </h2>
           <p className="text-xl text-blue-100">
-            Join thousands of satisfied customers who found their perfect home with us
+            Join thousands of satisfied customers who found their perfect home
+            with us
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
@@ -234,15 +304,37 @@ export const LandingPage = ({ onLogin, onSignup, onViewProperty }: LandingPagePr
                 <h3 className="text-xl font-bold">Shree Krishna Properties</h3>
               </div>
               <p className="text-gray-400">
-                Your trusted partner in finding the perfect property. Quality service since years.
+                Your trusted partner in finding the perfect property. Quality
+                service since years.
               </p>
             </div>
             <div>
               <h4 className="text-lg font-bold mb-4">Quick Links</h4>
               <ul className="space-y-2 text-gray-400">
-                <li><button onClick={onLogin} className="hover:text-white transition-colors">Properties</button></li>
-                <li><button onClick={onSignup} className="hover:text-white transition-colors">Register</button></li>
-                <li><button onClick={onLogin} className="hover:text-white transition-colors">Sign In</button></li>
+                <li>
+                  <button
+                    onClick={onLogin}
+                    className="hover:text-white transition-colors"
+                  >
+                    Properties
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={onSignup}
+                    className="hover:text-white transition-colors"
+                  >
+                    Register
+                  </button>
+                </li>
+                <li>
+                  <button
+                    onClick={onLogin}
+                    className="hover:text-white transition-colors"
+                  >
+                    Sign In
+                  </button>
+                </li>
               </ul>
             </div>
             <div>

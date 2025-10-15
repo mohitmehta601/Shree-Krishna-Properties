@@ -13,20 +13,17 @@ export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true,
-    flowType: 'pkce'
+    flowType: 'implicit'
   },
   global: {
     headers: {
+      'apikey': supabaseAnonKey,
+      'Authorization': `Bearer ${supabaseAnonKey}`,
       'Content-Type': 'application/json',
-      'apikey': supabaseAnonKey
+      'Prefer': 'return=minimal'
     }
   },
   db: {
     schema: 'public'
-  },
-  realtime: {
-    params: {
-      eventsPerSecond: 10
-    }
   }
 });

@@ -90,43 +90,100 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const signUp = async (data: SignUpData): Promise<{ error: Error | null }> => {
     try {
-      // First, try to sign up the user
+      console.log("🚀 Starting signup process...");
+      console.log("📧 Email:", data.email);
+
+      // Test connection first
+      try {
+        const { data: testData, error: testError } =
+          await supabase.auth.getSession();
+        console.log(
+          "✅ Supabase connection test:",
+          testData ? "SUCCESS" : "FAILED",
+          testError
+        );
+      } catch (testErr) {
+        console.log("❌ Supabase connection test failed:", testErr);
+      }
+
+      // Attempt signup with minimal options first
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: data.email,
         password: data.password,
-        options: {
-          data: {
-            name: data.name,
-            mobile: data.mobile,
-            address: data.address,
-            is_admin: false,
-          },
-          // Remove emailRedirectTo for now to avoid CORS issues
-          // emailRedirectTo: `${window.location.origin}/`,
-        },
       });
 
       if (authError) {
-        console.error("Auth error:", authError);
-        throw authError;
+        console.error("❌ Auth error:", authError);
+
+        // Handle specific Supabase errors
+        if (authError.message.includes("Email not confirmed")) {
+          throw new Error(
+            "Please check your email and click the confirmation link"
+          );
+        } else if (authError.message.includes("Invalid email")) {
+          throw new Error("Please enter a valid email address");
+        } else if (authError.message.includes("Password")) {
+          throw new Error("Password must be at least 6 characters long");
+        } else if (authError.message.includes("User already registered")) {
+          throw new Error(
+            "This email is already registered. Please try logging in instead."
+          );
+        } else {
+          throw authError;
+        }
       }
 
       if (!authData.user) {
         throw new Error("Signup failed - no user created");
       }
 
-      // Log success for debugging
-      console.log("User created successfully:", authData.user.email);
+      console.log("✅ User created successfully:", authData.user.email);
+      console.log("👤 User ID:", authData.user.id);
+      console.log(
+        "📧 Email confirmed:",
+        authData.user.email_confirmed_at ? "Yes" : "No"
+      );
+
+      // Now try to create the profile using proper typing
+      try {
+        const profileData = {
+          user_id: authData.user.id,
+          name: data.name,
+          mobile: data.mobile,
+          email: data.email,
+          address: data.address,
+          is_admin: false,
+        };
+
+        const { error: profileError } = await supabase
+          .from("profiles")
+          .insert(profileData as any); // Using 'as any' to bypass TypeScript issues temporarily
+
+        if (profileError) {
+          console.warn("⚠️ Profile creation failed:", profileError);
+          // Don't fail the signup for profile creation issues
+        } else {
+          console.log("✅ Profile created successfully");
+        }
+      } catch (profileErr) {
+        console.warn("⚠️ Profile creation error:", profileErr);
+      }
 
       return { error: null };
     } catch (error) {
-      console.error("Signup error:", error);
+      console.error("💥 Signup error:", error);
 
       // Provide more specific error messages
       let errorMessage = "Failed to create account";
 
       if (error instanceof Error) {
-        if (error.message.includes("User already registered")) {
+        if (
+          error.message.includes("fetch") ||
+          error.message.includes("Failed to fetch")
+        ) {
+          errorMessage =
+            "Connection error. Please check:\n\n1. Your internet connection\n2. Supabase project is active\n3. Email confirmation is DISABLED in Supabase dashboard\n4. Sign-ups are ENABLED in Supabase dashboard";
+        } else if (error.message.includes("User already registered")) {
           errorMessage =
             "This email is already registered. Please try logging in instead.";
         } else if (error.message.includes("Invalid email")) {
@@ -134,11 +191,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
         } else if (error.message.includes("Password")) {
           errorMessage = "Password must be at least 6 characters long.";
         } else if (
-          error.message.includes("fetch") ||
-          error.message.includes("Network")
+          error.message.includes("403") ||
+          error.message.includes("Forbidden")
         ) {
           errorMessage =
-            "Connection error. Please check your internet connection and try again.";
+            "Access denied. Please ensure:\n\n1. Email confirmation is DISABLED in Supabase\n2. Sign-ups are ENABLED in Supabase\n3. Site URL is set to http://localhost:5173";
         } else {
           errorMessage = error.message;
         }
