@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { LogIn } from "lucide-react";
+import { BackButton } from "./BackButton";
 
-export const Login = ({ onSwitchToSignup, onSuccess }: any) => {
+export const Login = ({ onSwitchToSignup, onSuccess, onBack }: any) => {
   const { signIn } = useAuth();
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
@@ -24,6 +25,7 @@ export const Login = ({ onSwitchToSignup, onSuccess }: any) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+      {onBack && <BackButton onClick={onBack} />}
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="flex items-center justify-center mb-6">
           <div className="bg-blue-600 p-3 rounded-full">

@@ -74,6 +74,7 @@ function AppContent() {
         <Signup
           onSwitchToLogin={() => setPage({ type: "login" })}
           onSuccess={() => setPage({ type: "login" })}
+          onBack={() => setPage({ type: "landing" })}
         />
       );
     }
@@ -88,6 +89,7 @@ function AppContent() {
               setPage({ type: "user-dashboard" });
             }
           }}
+          onBack={() => setPage({ type: "landing" })}
         />
       );
     }
@@ -132,6 +134,7 @@ function AppContent() {
               setPage({ type: "admin-property-form", property })
             }
             onViewInquiries={() => setPage({ type: "admin-inquiries" })}
+            onBack={() => setPage({ type: "landing" })}
           />
         );
     }
@@ -169,6 +172,7 @@ function AppContent() {
             setPage({ type: "search-results", query })
           }
           onViewInquiries={() => setPage({ type: "user-inquiries" })}
+          onBack={() => setPage({ type: "landing" })}
         />
       );
   }

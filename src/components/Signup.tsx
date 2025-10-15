@@ -2,8 +2,9 @@ import { useState } from "react";
 import { useAuth } from "../contexts/AuthContext";
 import { UserPlus } from "lucide-react";
 import { validatePassword, isMobileNumber, isEmail } from "../lib/utils";
+import { BackButton } from "./BackButton";
 
-export const Signup = ({ onSwitchToLogin, onSuccess }: any) => {
+export const Signup = ({ onSwitchToLogin, onSuccess, onBack }: any) => {
   const { signUp } = useAuth();
   const [formData, setFormData] = useState({
     name: "",
@@ -85,6 +86,7 @@ export const Signup = ({ onSwitchToLogin, onSuccess }: any) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
+      {onBack && <BackButton onClick={onBack} />}
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl">
         <div className="flex items-center justify-center mb-6">
           <div className="bg-blue-600 p-3 rounded-full">
