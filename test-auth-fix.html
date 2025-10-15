@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Supabase Auth Fix</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <div style="max-width: 600px; margin: 50px auto; padding: 20px; font-family: Arial, sans-serif;">
+        <h2>Test Supabase Authentication</h2>
+        
+        <div style="margin-bottom: 20px;">
+            <h3>Sign Up Test</h3>
+            <input type="email" id="email" placeholder="Email" style="margin-right: 10px;">
+            <input type="password" id="password" placeholder="Password" style="margin-right: 10px;">
+            <button onclick="testSignUp()">Test Sign Up</button>
+        </div>
+        
+        <div id="result" style="margin-top: 20px; padding: 10px; border: 1px solid #ccc; background: #f9f9f9;"></div>
+    </div>
+
+    <script>
+        const { createClient } = supabase;
+        
+        const supabaseUrl = 'https://wqdrmjrxncpszekxhrhc.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6IndxZHJtanJ4bmNwc3pla3hocmhjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjAzNDM5NjUsImV4cCI6MjA3NTkxOTk2NX0.fSRpemNa-dQT0ZJijp6yoKuMZnaMRIeeILghe0HpcAg';
+        
+        const client = createClient(supabaseUrl, supabaseKey);
+        
+        async function testSignUp() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const resultDiv = document.getElementById('result');
+            
+            if (!email || !password) {
+                resultDiv.innerHTML = '<div style="color: red;">Please enter email and password</div>';
+                return;
+            }
+            
+            resultDiv.innerHTML = '<div style="color: blue;">Testing signup...</div>';
+            
+            try {
+                const { data, error } = await client.auth.signUp({
+                    email: email,
+                    password: password,
+                    options: {
+                        data: {
+                            name: 'Test User',
+                            mobile: '1234567890',
+                            address: 'Test Address',
+                            is_admin: false
+                        }
+                    }
+                });
+                
+                if (error) {
+                    throw error;
+                }
+                
+                resultDiv.innerHTML = `
+                    <div style="color: green;">
+                        <strong>✅ SUCCESS!</strong><br>
+                        User created: ${data.user?.email}<br>
+                        User ID: ${data.user?.id}<br>
+                        Email confirmed: ${data.user?.email_confirmed_at ? 'Yes' : 'No'}<br>
+                        <em>If email confirmation is disabled, you should see "Email confirmed: No" which is expected.</em>
+                    </div>
+                `;
+                
+            } catch (error) {
+                resultDiv.innerHTML = `
+                    <div style="color: red;">
+                        <strong>❌ ERROR:</strong><br>
+                        ${error.message}<br><br>
+                        <strong>Troubleshooting:</strong><br>
+                        • Check Supabase dashboard email settings<br>
+                        • Ensure email confirmation is disabled for development<br>
+                        • Verify Site URL is set to http://localhost:5173<br>
+                        • Make sure sign-ups are enabled
+                    </div>
+                `;
+            }
+        }
+        
+        // Test connection on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = '<div style="color: blue;">Testing Supabase connection...</div>';
+            
+            try {
+                const { data, error } = await client.auth.getSession();
+                resultDiv.innerHTML = '<div style="color: green;">✅ Supabase connection successful! Ready to test signup.</div>';
+            } catch (error) {
+                resultDiv.innerHTML = `<div style="color: red;">❌ Connection failed: ${error.message}</div>`;
+            }
+        });
+    </script>
+</body>
+</html>
