@@ -16,9 +16,11 @@ const supabase = createClient(supabaseUrl, supabaseServiceKey, {
 });
 
 async function seedAdmin() {
-  const adminEmail = 'g.mehta1971@gmail.com';
-  const adminMobile = '7877059117';
-  const adminPassword = 'Kota2020';
+  // Updated admin credentials as requested:
+  // Email: admin@gmail.com, Password: Admin@123
+  const adminEmail = 'admin@gmail.com';
+  const adminMobile = '9999999999';
+  const adminPassword = 'Admin@123';
 
   console.log('Checking if admin user already exists...');
 
@@ -51,6 +53,23 @@ async function seedAdmin() {
 
   if (authError) {
     console.error('Error creating admin user:', authError);
+    process.exit(1);
+  }
+
+  // Create profile for the admin user
+  const { error: profileError } = await supabase
+    .from('profiles')
+    .insert({
+      user_id: authData.user.id,
+      name: 'Admin User',
+      mobile: adminMobile,
+      email: adminEmail,
+      address: 'Admin Address',
+      is_admin: true
+    });
+
+  if (profileError) {
+    console.error('Error creating admin profile:', profileError);
     process.exit(1);
   }
 

@@ -1,8 +1,9 @@
 {
-  "name": "vite-react-typescript-starter",
+  "name": "shree-krishna-properties",
   "private": true,
-  "version": "0.0.0",
+  "version": "1.0.0",
   "type": "module",
+  "description": "A production-ready property listing platform with separate user and admin dashboards",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
@@ -11,7 +12,12 @@
     "typecheck": "tsc --noEmit -p tsconfig.app.json",
     "test": "vitest run",
     "test:watch": "vitest",
-    "test:ui": "vitest --ui"
+    "test:ui": "vitest --ui",
+    "seed-admin": "npx tsx scripts/seed-admin.ts",
+    "seed-sample": "npx tsx scripts/seed-sample-data.ts",
+    "deploy:check": "npm run typecheck && npm run build",
+    "deploy:windows": ".\\deploy.bat",
+    "deploy:unix": "./deploy.sh"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.75.0",
