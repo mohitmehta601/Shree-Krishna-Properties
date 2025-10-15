@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   CheckCircle,
   XCircle,
@@ -22,11 +23,8 @@ interface InquiryWithDetails extends Inquiry {
   profile: Profile;
 }
 
-interface AdminInquiriesProps {
-  onBack: () => void;
-}
-
-export const AdminInquiries = ({ onBack }: AdminInquiriesProps) => {
+export const AdminInquiries = () => {
+  const navigate = useNavigate();
   const [inquiries, setInquiries] = useState<InquiryWithDetails[]>([]);
   const [filter, setFilter] = useState<
     "all" | "pending" | "approved" | "denied"
@@ -77,8 +75,7 @@ export const AdminInquiries = ({ onBack }: AdminInquiriesProps) => {
           ? new Date(`${assignedDate}T${assignedTime}`).toISOString()
           : null;
 
-      const { error } = await supabase
-        .from("inquiries")
+      const { error } = await (supabase.from("inquiries") as any)
         .update({
           status: "approved",
           admin_assigned_datetime: approvedDateTime,
@@ -101,8 +98,7 @@ export const AdminInquiries = ({ onBack }: AdminInquiriesProps) => {
 
   const handleDeny = async (inquiryId: string) => {
     try {
-      const { error } = await supabase
-        .from("inquiries")
+      const { error } = await (supabase.from("inquiries") as any)
         .update({
           status: "denied",
           admin_notes: adminNotes || null,
@@ -124,7 +120,7 @@ export const AdminInquiries = ({ onBack }: AdminInquiriesProps) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={() => navigate("/admin")} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
           <h1 className="text-2xl font-bold text-gray-900 mb-4">

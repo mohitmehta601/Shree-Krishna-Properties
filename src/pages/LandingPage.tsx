@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   Home,
   Search,
@@ -12,19 +13,11 @@ import {
 } from "lucide-react";
 import { supabase } from "../lib/supabase";
 import { PropertyCard } from "../components/PropertyCard";
+import type { Property } from "../App";
 
-interface LandingPageProps {
-  onLogin: () => void;
-  onSignup: () => void;
-  onViewProperty: (property: any) => void;
-}
-
-export const LandingPage = ({
-  onLogin,
-  onSignup,
-  onViewProperty,
-}: LandingPageProps) => {
-  const [featuredProperties, setFeaturedProperties] = useState<any[]>([]);
+export const LandingPage = () => {
+  const navigate = useNavigate();
+  const [featuredProperties, setFeaturedProperties] = useState<Property[]>([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
@@ -88,13 +81,13 @@ export const LandingPage = ({
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={onLogin}
+                onClick={() => navigate("/login")}
                 className="px-6 py-2.5 text-gray-700 hover:text-gray-900 font-medium transition-colors"
               >
                 Sign In
               </button>
               <button
-                onClick={onSignup}
+                onClick={() => navigate("/signup")}
                 className="px-6 py-2.5 bg-blue-600 text-white rounded-lg hover:bg-blue-700 font-medium shadow-md hover:shadow-lg transition-all"
               >
                 Get Started
@@ -122,14 +115,14 @@ export const LandingPage = ({
               </p>
               <div className="flex flex-col sm:flex-row gap-4">
                 <button
-                  onClick={onSignup}
+                  onClick={() => navigate("/signup")}
                   className="flex items-center justify-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 font-semibold shadow-lg hover:shadow-xl transition-all text-lg"
                 >
                   <span>Explore Properties</span>
                   <ArrowRight className="w-5 h-5" />
                 </button>
                 <button
-                  onClick={onLogin}
+                  onClick={() => navigate("/login")}
                   className="flex items-center justify-center gap-2 bg-white text-gray-700 px-8 py-4 rounded-xl hover:bg-gray-50 font-semibold border-2 border-gray-200 transition-all text-lg"
                 >
                   <Search className="w-5 h-5" />
@@ -250,13 +243,15 @@ export const LandingPage = ({
                 <PropertyCard
                   key={property.id}
                   property={property}
-                  onClick={onViewProperty}
+                  onClick={(property: Property) =>
+                    navigate(`/property/${property.id}`)
+                  }
                 />
               ))}
             </div>
             <div className="text-center mt-12">
               <button
-                onClick={onSignup}
+                onClick={() => navigate("/signup")}
                 className="inline-flex items-center gap-2 bg-blue-600 text-white px-8 py-4 rounded-xl hover:bg-blue-700 font-semibold shadow-lg hover:shadow-xl transition-all"
               >
                 <span>View All Properties</span>
@@ -278,13 +273,13 @@ export const LandingPage = ({
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <button
-              onClick={onSignup}
+              onClick={() => navigate("/signup")}
               className="bg-white text-blue-600 px-8 py-4 rounded-xl hover:bg-blue-50 font-semibold shadow-lg hover:shadow-xl transition-all text-lg"
             >
               Create Free Account
             </button>
             <button
-              onClick={onLogin}
+              onClick={() => navigate("/login")}
               className="bg-blue-500 text-white px-8 py-4 rounded-xl hover:bg-blue-400 font-semibold border-2 border-white/20 transition-all text-lg"
             >
               Sign In Now
@@ -313,7 +308,7 @@ export const LandingPage = ({
               <ul className="space-y-2 text-gray-400">
                 <li>
                   <button
-                    onClick={onLogin}
+                    onClick={() => navigate("/login")}
                     className="hover:text-white transition-colors"
                   >
                     Properties
@@ -321,7 +316,7 @@ export const LandingPage = ({
                 </li>
                 <li>
                   <button
-                    onClick={onSignup}
+                    onClick={() => navigate("/signup")}
                     className="hover:text-white transition-colors"
                   >
                     Register
@@ -329,7 +324,7 @@ export const LandingPage = ({
                 </li>
                 <li>
                   <button
-                    onClick={onLogin}
+                    onClick={() => navigate("/login")}
                     className="hover:text-white transition-colors"
                   >
                     Sign In

@@ -1,10 +1,14 @@
 import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { LogIn } from "lucide-react";
 import { BackButton } from "./BackButton";
 
-export const Login = ({ onSwitchToSignup, onSuccess, onBack }: any) => {
+export const Login = () => {
   const { signIn } = useAuth();
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [identifier, setIdentifier] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -19,13 +23,18 @@ export const Login = ({ onSwitchToSignup, onSuccess, onBack }: any) => {
       setError(error.message);
       setLoading(false);
     } else {
-      onSuccess();
+      // Check if there's an intended destination from protected route
+      const from = location.state?.from?.pathname;
+      if (from && from !== "/login" && from !== "/signup") {
+        navigate(from, { replace: true });
+      }
+      // Otherwise, let the AuthHandler in App.tsx handle the redirect to dashboard
     }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-      {onBack && <BackButton onClick={onBack} />}
+      <BackButton onClick={() => navigate("/")} />
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-md">
         <div className="flex items-center justify-center mb-6">
           <div className="bg-blue-600 p-3 rounded-full">
@@ -81,7 +90,7 @@ export const Login = ({ onSwitchToSignup, onSuccess, onBack }: any) => {
             Don't have an account?{" "}
             <button
               type="button"
-              onClick={onSwitchToSignup}
+              onClick={() => navigate("/signup")}
               className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
               Sign up

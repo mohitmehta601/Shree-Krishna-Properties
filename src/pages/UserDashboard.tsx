@@ -1,19 +1,17 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Search, LogOut, FileText, Home } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { ImageViewer } from "../components/ImageViewer";
 import { PropertyCard } from "../components/PropertyCard";
 import { BackButton } from "../components/BackButton";
+import type { Property } from "../App";
 
-export const UserDashboard = ({
-  onViewProperty,
-  onSearch,
-  onViewInquiries,
-  onBack,
-}: any) => {
+export const UserDashboard = () => {
   const { profile, signOut } = useAuth();
-  const [properties, setProperties] = useState<any[]>([]);
+  const navigate = useNavigate();
+  const [properties, setProperties] = useState<Property[]>([]);
   const [featuredImages, setFeaturedImages] = useState<string[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
@@ -30,7 +28,11 @@ export const UserDashboard = ({
         .is("deleted_at", null)
         .order("created_at", { ascending: false });
       setProperties(data || []);
-      const images = data?.slice(0, 5).map((p) => p.thumbnail_url) || [];
+      const images =
+        (data || [])
+          .slice(0, 5)
+          .map((p: Property) => p.thumbnail_url)
+          .filter(Boolean) || [];
       setFeaturedImages(images);
     } catch (error) {
       console.error("Error fetching properties:", error);
@@ -41,12 +43,14 @@ export const UserDashboard = ({
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
-    if (searchQuery.trim()) onSearch(searchQuery);
+    if (searchQuery.trim()) {
+      navigate(`/search?q=${encodeURIComponent(searchQuery)}`);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {onBack && <BackButton onClick={onBack} />}
+      <BackButton onClick={() => navigate("/")} />
       <header className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-7xl mx-auto px-4 py-4">
           <div className="flex items-center justify-between mb-4">
@@ -65,7 +69,7 @@ export const UserDashboard = ({
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={onViewInquiries}
+                onClick={() => navigate("/inquiries")}
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
               >
                 <FileText className="w-5 h-5" />
@@ -125,7 +129,9 @@ export const UserDashboard = ({
                 <PropertyCard
                   key={property.id}
                   property={property}
-                  onClick={onViewProperty}
+                  onClick={(property: any) =>
+                    navigate(`/property/${property.id}`)
+                  }
                 />
               ))}
             </div>

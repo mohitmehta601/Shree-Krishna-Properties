@@ -1,11 +1,13 @@
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 import { UserPlus } from "lucide-react";
 import { validatePassword, isMobileNumber, isEmail } from "../lib/utils";
 import { BackButton } from "./BackButton";
 
-export const Signup = ({ onSwitchToLogin, onSuccess, onBack }: any) => {
+export const Signup = () => {
   const { signUp } = useAuth();
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     name: "",
     mobile: "",
@@ -72,7 +74,7 @@ export const Signup = ({ onSwitchToLogin, onSuccess, onBack }: any) => {
         alert(
           "Account created successfully! Please check your email to confirm your account (if required)."
         );
-        onSuccess();
+        navigate("/login");
       }
     } catch (err: any) {
       console.error("Unexpected error:", err);
@@ -86,7 +88,7 @@ export const Signup = ({ onSwitchToLogin, onSuccess, onBack }: any) => {
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-blue-100 flex items-center justify-center p-4">
-      {onBack && <BackButton onClick={onBack} />}
+      <BackButton onClick={() => navigate("/")} />
       <div className="bg-white rounded-2xl shadow-xl p-8 w-full max-w-2xl">
         <div className="flex items-center justify-center mb-6">
           <div className="bg-blue-600 p-3 rounded-full">
@@ -197,7 +199,7 @@ export const Signup = ({ onSwitchToLogin, onSuccess, onBack }: any) => {
             Already have an account?{" "}
             <button
               type="button"
-              onClick={onSwitchToLogin}
+              onClick={() => navigate("/login")}
               className="text-blue-600 hover:text-blue-700 font-medium hover:underline"
             >
               Sign in

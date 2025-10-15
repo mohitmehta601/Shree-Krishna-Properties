@@ -1,12 +1,14 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Calendar } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { formatDate } from "../lib/utils";
 import { BackButton } from "../components/BackButton";
 
-export const UserInquiries = ({ onBack }: any) => {
+export const UserInquiries = () => {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const [inquiries, setInquiries] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
 
@@ -32,7 +34,7 @@ export const UserInquiries = ({ onBack }: any) => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      <BackButton onClick={onBack} />
+      <BackButton onClick={() => navigate("/dashboard")} />
       <div className="max-w-7xl mx-auto px-4 py-8">
         <h1 className="text-2xl font-bold mb-6">My Visit Requests</h1>
         {loading ? (

@@ -1,15 +1,13 @@
 import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { Plus, LogOut, FileText, Home, Edit, Trash2 } from "lucide-react";
 import { useAuth } from "../contexts/AuthContext";
 import { supabase } from "../lib/supabase";
 import { formatPrice } from "../lib/utils";
 
-export const AdminDashboard = ({
-  onAddProperty,
-  onEditProperty,
-  onViewInquiries,
-}: any) => {
+export const AdminDashboard = () => {
   const { signOut } = useAuth();
+  const navigate = useNavigate();
   const [properties, setProperties] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [deleteConfirm, setDeleteConfirm] = useState<string | null>(null);
@@ -65,7 +63,7 @@ export const AdminDashboard = ({
             </div>
             <div className="flex items-center gap-3">
               <button
-                onClick={onViewInquiries}
+                onClick={() => navigate("/admin/inquiries")}
                 className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-100 rounded-lg"
               >
                 <FileText className="w-5 h-5" />
@@ -88,7 +86,7 @@ export const AdminDashboard = ({
             Property Management
           </h2>
           <button
-            onClick={onAddProperty}
+            onClick={() => navigate("/admin/properties/new")}
             className="flex items-center gap-2 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 font-medium"
           >
             <Plus className="w-5 h-5" />
@@ -149,7 +147,9 @@ export const AdminDashboard = ({
                     <td className="px-6 py-4 text-right">
                       <div className="flex items-center justify-end gap-2">
                         <button
-                          onClick={() => onEditProperty(property)}
+                          onClick={() =>
+                            navigate(`/admin/properties/edit/${property.id}`)
+                          }
                           className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-lg"
                         >
                           <Edit className="w-4 h-4" />
