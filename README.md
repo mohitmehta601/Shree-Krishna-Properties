@@ -2,91 +2,39 @@
 
 A production-ready property listing platform with separate user and admin dashboards, built with React, TypeScript, Tailwind CSS, and Supabase.
 
-## ✅ Current Implementation Status
+## Features
 
-### ✅ Completed Features
+### User Features
+- Single-field login (email or mobile number)
+- Secure signup with validation
+- Browse all properties with image slideshow
+- Search properties by location
+- View detailed property information
+- Schedule property visits
+- Track inquiry status
 
-**Authentication & User Management**
+### Admin Features
+- Admin login with predefined credentials
+- Add/edit/delete properties
+- Upload up to 4 images per property with thumbnail selection
+- View and manage user inquiries
+- Approve/deny visit requests with optional date/time assignment
 
-- ✅ Single-field login (email or mobile number)
-- ✅ Secure user signup with validation
-- ✅ Password strength validation
-- ✅ Mobile number validation (10 digits)
-- ✅ Email format validation
-- ✅ Admin account with predefined credentials
-- ✅ Role-based access control (Admin vs User)
+## Tech Stack
 
-**Database & Schema**
+- **Frontend**: React 18, TypeScript, Vite
+- **Styling**: Tailwind CSS
+- **Backend**: Supabase (Auth, Database, Storage)
+- **Icons**: Lucide React
 
-- ✅ Complete database schema with RLS policies
-- ✅ `profiles` table for user information
-- ✅ `properties` table with all required fields
-- ✅ `inquiries` table for visit requests
-- ✅ Automatic unique code generation (SKP-YYYYMMDD-XXXX format)
-- ✅ Storage bucket for property images
-- ✅ Indexes for optimal performance
-
-**User Features**
-
-- ✅ Landing page with hero section and featured properties
-- ✅ Property browsing with pagination
-- ✅ Property search by location
-- ✅ Property detail view with image gallery
-- ✅ Image viewer with autoplay slideshow
-- ✅ Schedule property visits
-- ✅ View inquiry status and history
-- ✅ Responsive mobile design
-
-**Admin Features**
-
-- ✅ Admin dashboard with property management
-- ✅ Add new properties with all required fields
-- ✅ Image upload (up to 4 images per property)
-- ✅ Thumbnail selection for properties
-- ✅ Edit existing properties
-- ✅ Soft delete properties
-- ✅ View and manage user inquiries
-- ✅ Approve/deny visit requests
-
-**Technical Implementation**
-
-- ✅ TypeScript for type safety
-- ✅ Responsive UI with Tailwind CSS
-- ✅ Supabase integration (Auth + Database + Storage)
-- ✅ Row Level Security (RLS) policies
-- ✅ Error handling and loading states
-- ✅ Form validation (client-side)
-- ✅ Image optimization and storage
-- ✅ Clean component architecture
-
-### 🔧 Enhanced Features (Recent Updates)
-
-1. **Fixed TypeScript Errors**: All implicit 'any' types have been properly typed
-2. **Updated Admin Credentials**: Corrected to use g.mehta1971@gmail.com / 7877059117 / Kota2020
-3. **Automatic Unique Codes**: Database function generates SKP-YYYYMMDD-XXXX codes automatically
-4. **Enhanced Property Form**: Complete admin form with all required fields and image upload
-5. **Production Ready**: Clean codebase ready for deployment
-
-## 🚀 Getting Started
-
-### Prerequisites
+## Prerequisites
 
 - Node.js 18+ and npm
 - Supabase account and project
 
-### Installation
+## Environment Variables
 
-1. **Clone and install dependencies:**
-
-```bash
-git clone <your-repo>
-cd shree-krishna-properties
-npm install
-```
-
-2. **Environment Setup:**
-
-Create a `.env` file:
+Create a `.env` file in the root directory:
 
 ```env
 VITE_SUPABASE_URL=your_supabase_project_url
@@ -94,236 +42,297 @@ VITE_SUPABASE_ANON_KEY=your_supabase_anon_key
 SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
 ```
 
-3. **Database Setup:**
+## Installation
 
-The database is already configured with:
+1. Install dependencies:
+```bash
+npm install
+```
 
-- All required tables (`profiles`, `properties`, `inquiries`)
-- RLS policies for security
-- Storage bucket for images
-- Automatic unique code generation
+2. The database migrations have already been applied to your Supabase project with:
+   - `profiles` table for user information
+   - `properties` table for property listings
+   - `inquiries` table for visit requests
+   - `property-images` storage bucket
+   - Row Level Security (RLS) policies
 
-4. **Seed Admin Account:**
-
+3. Seed the admin account:
 ```bash
 npx tsx scripts/seed-admin.ts
 ```
 
-5. **Run Development Server:**
+## Admin Credentials
 
+**Default admin credentials:**
+- Email: `g.mehta1971@gmail.com`
+- Mobile: `7877059117`
+- Password: `Kota2020`
+
+You can login using either the email or mobile number in the same input field.
+
+## Development
+
+Start the development server:
 ```bash
 npm run dev
 ```
 
-Visit `http://localhost:5173`
+The application will be available at `http://localhost:5173`
 
-## 🔐 Admin Access
+## Build
 
-**Admin Login Credentials:**
-
-- **Email:** g.mehta1971@gmail.com
-- **Mobile:** 7877059117
-- **Password:** Kota2020
-
-You can login using either the email OR mobile number in the login field.
-
-## 📋 Complete Feature List
-
-### User Dashboard
-
-- **Property Browsing**: View all properties with pagination
-- **Advanced Search**: Search by location with full-text search
-- **Property Details**: Complete property information with image gallery
-- **Image Viewer**: Autoplay slideshow with manual controls
-- **Schedule Visits**: Request property visits with date/time
-- **Inquiry Management**: Track visit request status
-- **Responsive Design**: Mobile-first responsive layout
-
-### Admin Dashboard
-
-- **Property Management**: Add, edit, delete properties
-- **Image Upload**: Upload up to 4 images per property
-- **Thumbnail Selection**: Choose which image appears as thumbnail
-- **Complete Property Form**:
-  - Name of Property
-  - Location (full address with optional lat/lng)
-  - Description
-  - Price
-  - Area (sq ft)
-  - Property Type (Plot, Kothi, 1BHK, 2BHK, 3BHK, Studio Apartment, Duplex, Triplex, Serviced Apartment, Builder Floor, Shop, Penthouse, Villa, Farmhouse)
-  - Ad Type (Rent/Sale)
-  - Direction Facing (North/East/South/West)
-  - Length & Breadth
-- **Inquiry Management**: View and respond to user inquiries
-- **Visit Approval**: Approve/deny visit requests
-- **User Information**: Access to user contact details
-
-### Authentication Features
-
-- **Flexible Login**: Email OR mobile number in single field
-- **Strong Validation**: Password strength, email format, mobile format
-- **Secure Signup**: Complete user profile collection
-- **Role Management**: Automatic admin/user role assignment
-
-## 🛠 Tech Stack
-
-- **Frontend**: React 18, TypeScript, Vite
-- **Styling**: Tailwind CSS
-- **Backend**: Supabase (Auth, Database, Storage)
-- **Icons**: Lucide React
-- **Validation**: Custom utility functions
-- **Image Storage**: Supabase Storage with automatic URL generation
-
-## 📁 Project Structure
-
-```
-src/
-├── components/          # Reusable UI components
-│   ├── Login.tsx        # Enhanced login (email/mobile)
-│   ├── Signup.tsx       # User registration
-│   ├── ImageViewer.tsx  # Image slideshow component
-│   └── PropertyCard.tsx # Property display card
-├── pages/               # Main application pages
-│   ├── LandingPage.tsx      # Public homepage
-│   ├── UserDashboard.tsx    # User property browsing
-│   ├── AdminDashboard.tsx   # Admin property management
-│   ├── PropertyDetail.tsx   # Property details view
-│   ├── SearchResults.tsx    # Search results page
-│   ├── UserInquiries.tsx    # User inquiry history
-│   ├── AdminPropertyForm.tsx # Add/edit properties
-│   └── AdminInquiries.tsx   # Admin inquiry management
-├── contexts/            # React contexts
-│   └── AuthContext.tsx  # Authentication state
-├── lib/                 # Utilities and configuration
-│   ├── supabase.ts     # Supabase client
-│   ├── database.types.ts # TypeScript types
-│   └── utils.ts        # Utility functions
-└── App.tsx             # Main application component
-```
-
-## 🔒 Security Features
-
-- **Row Level Security**: All database operations secured with RLS
-- **Authentication Required**: Protected routes for authenticated users
-- **Admin-Only Operations**: Property creation restricted to admins
-- **File Upload Security**: Images stored securely in Supabase Storage
-- **Input Validation**: Both client and server-side validation
-
-## 🧪 Testing
-
-Run the test suite:
-
-```bash
-npm test           # Run once
-npm run test:watch # Watch mode
-npm run test:ui    # Visual test runner
-```
-
-**Test Coverage:**
-
-- ✅ Utility functions (validation, formatting)
-- ✅ Authentication components
-- ✅ Property management components
-- ✅ Core user flows
-
-## 🚀 Deployment
-
-### Quick Deploy to Vercel
-
-1. **Push to GitHub:**
-
-```bash
-git add .
-git commit -m "Ready for deployment"
-git push origin main
-```
-
-2. **Deploy on Vercel:**
-
-- Connect your GitHub repo to Vercel
-- Set environment variables:
-  ```
-  VITE_SUPABASE_URL=your_supabase_url
-  VITE_SUPABASE_ANON_KEY=your_anon_key
-  ```
-- Deploy!
-
-3. **Seed Admin Account:**
-
-```bash
-# Locally (one time only)
-VITE_SUPABASE_URL="your_url" SUPABASE_SERVICE_ROLE_KEY="your_key" npx tsx scripts/seed-admin.ts
-```
-
-### Alternative: Netlify Deploy
-
-1. **Build locally:**
-
+Create a production build:
 ```bash
 npm run build
 ```
 
-2. **Deploy to Netlify:**
-
-- Drag and drop the `dist` folder to Netlify
-- Or connect GitHub for continuous deployment
-
-3. **Set Environment Variables in Netlify:**
-
-- Go to Site Settings > Environment Variables
-- Add `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY`
-
-## 📈 Performance Optimizations
-
-- **Image Optimization**: Automatic image resizing and compression
-- **Database Indexes**: Optimized queries for search and filtering
-- **Lazy Loading**: Components loaded on demand
-- **Caching**: Supabase built-in caching for static data
-- **Mobile Optimized**: Fast loading on mobile devices
-
-## 🔧 Configuration
-
-### Environment Variables
-
-```env
-# Required for Frontend
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your_anon_key
-
-# Required for Admin Seeding (Local Only)
-SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+Preview the production build:
+```bash
+npm run preview
 ```
 
-### Supabase Configuration
+## Database Schema
 
-- **Email Confirmation**: Disabled for development
-- **Sign-ups**: Enabled
-- **RLS**: Enabled on all tables
-- **Storage**: Public bucket for property images
+### profiles
+- Stores user information
+- Links to Supabase Auth users
+- Contains `is_admin` flag for role-based access
 
-## 📞 Support & Contact
+### properties
+- Stores property listings
+- Soft-delete support via `deleted_at`
+- Unique code generation (SKP-YYYYMMDD-XXXX)
+- JSONB field for multiple images
+- Full-text search on location
 
-For technical support or questions:
+### inquiries
+- Stores visit requests
+- Status tracking (pending/approved/denied)
+- Links users to properties
+- Admin notes and assigned datetime
 
-- **Admin Email**: g.mehta1971@gmail.com
-- **Admin Mobile**: 7877059117
+## Security
 
-## 📜 License
+- Row Level Security (RLS) enabled on all tables
+- Only admins can create/update/delete properties
+- Users can only view their own inquiries
+- Admins can view all inquiries
+- Image uploads restricted to admins
+- File size limit: 5MB per image
+- Max 4 images per property
 
-MIT License - See LICENSE file for details
+## Usage Guide
 
----
+### For Users
 
-## 🎯 Development Notes
+1. **Sign Up**: Create an account with name, mobile, email, and address
+2. **Browse Properties**: View featured properties and complete listing
+3. **Search**: Use the search bar to find properties by location
+4. **View Details**: Click any property to see full details and image gallery
+5. **Schedule Visit**: Select date/time to request a property visit
+6. **Track Inquiries**: View status of your visit requests
 
-This is a **production-ready** application with:
+### For Admins
 
-- ✅ Complete feature implementation
-- ✅ Production-grade security
-- ✅ Responsive mobile design
-- ✅ Comprehensive error handling
-- ✅ Type-safe codebase
-- ✅ Scalable architecture
-- ✅ Ready for deployment
+1. **Login**: Use admin credentials (email or mobile)
+2. **Add Property**: Fill form with all required details and upload images
+3. **Select Thumbnail**: Choose which image appears as the property thumbnail
+4. **Manage Properties**: Edit or delete existing listings
+5. **Review Inquiries**: View all user visit requests
+6. **Approve/Deny**: Take action on inquiries and optionally assign visit datetime
 
-The application successfully implements all requested features and is ready for immediate deployment and use.
+## Testing
+
+Run the test suite:
+```bash
+npm test
+```
+
+Run tests in watch mode:
+```bash
+npm run test:watch
+```
+
+Run tests with UI:
+```bash
+npm run test:ui
+```
+
+### Test Coverage
+
+- ✅ Utility functions (validation, formatting)
+- ✅ Authentication components (Login, Signup)
+- ✅ Property components (PropertyCard)
+- ✅ Core user flows
+
+## Deployment
+
+### Complete Deployment Guide
+
+#### Step 1: Prepare Your Supabase Project
+
+1. **Create a Supabase Project**
+   - Go to [https://supabase.com](https://supabase.com)
+   - Click "New Project"
+   - Fill in project details and wait for setup to complete
+
+2. **Get Your Credentials**
+   - Go to Project Settings > API
+   - Copy `Project URL` (VITE_SUPABASE_URL)
+   - Copy `anon public` key (VITE_SUPABASE_ANON_KEY)
+   - Copy `service_role` key (SUPABASE_SERVICE_ROLE_KEY) - **Keep this secret!**
+
+3. **Database is Already Set Up**
+   - Tables (`profiles`, `properties`, `inquiries`) are created
+   - RLS policies are in place
+   - Storage bucket exists
+
+4. **Seed Admin Account**
+   ```bash
+   # Set environment variables first
+   export VITE_SUPABASE_URL="your_url"
+   export SUPABASE_SERVICE_ROLE_KEY="your_service_key"
+
+   # Run admin seed
+   npx tsx scripts/seed-admin.ts
+   ```
+
+5. **Optional: Add Sample Data**
+   ```bash
+   npx tsx scripts/seed-sample-data.ts
+   ```
+
+#### Step 2: Deploy to Vercel (Recommended)
+
+1. **Push to GitHub**
+   ```bash
+   git init
+   git add .
+   git commit -m "Initial commit"
+   git branch -M main
+   git remote add origin https://github.com/yourusername/shree-krishna-properties.git
+   git push -u origin main
+   ```
+
+2. **Deploy on Vercel**
+   - Go to [https://vercel.com](https://vercel.com)
+   - Click "New Project"
+   - Import your GitHub repository
+   - Configure project:
+     - Framework Preset: Vite
+     - Build Command: `npm run build`
+     - Output Directory: `dist`
+
+3. **Add Environment Variables in Vercel**
+   - Go to Project Settings > Environment Variables
+   - Add:
+     ```
+     VITE_SUPABASE_URL=your_supabase_url
+     VITE_SUPABASE_ANON_KEY=your_anon_key
+     ```
+   - **Note:** Do NOT add SUPABASE_SERVICE_ROLE_KEY to Vercel (security risk)
+
+4. **Deploy**
+   - Click "Deploy"
+   - Wait for deployment to complete
+   - Your app is live!
+
+#### Alternative: Deploy to Netlify
+
+1. **Build the project**
+   ```bash
+   npm run build
+   ```
+
+2. **Deploy to Netlify**
+   - Go to [https://netlify.com](https://netlify.com)
+   - Drag and drop the `dist` folder to deploy
+   - Or connect to GitHub for continuous deployment
+
+3. **Configure Environment Variables**
+   - Go to Site Settings > Environment Variables
+   - Add same variables as Vercel
+
+#### Step 3: Post-Deployment
+
+1. **Verify Admin Login**
+   - Visit your deployed site
+   - Click "Sign In"
+   - Login with: `g.mehta1971@gmail.com` or `7877059117`
+   - Password: `Kota2020`
+
+2. **Add Your First Property**
+   - Navigate to Admin Dashboard
+   - Click "Add New Property"
+   - Fill in details and upload images
+   - Select thumbnail and submit
+
+3. **Test User Flow**
+   - Sign out
+   - Create a new user account
+   - Browse properties
+   - Schedule a visit
+   - View inquiry status
+
+### Environment Variables Reference
+
+```env
+# Required for Frontend (Add to Vercel/Netlify)
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJxxx...
+
+# Required for Seeding Only (Local use only, DO NOT deploy)
+SUPABASE_SERVICE_ROLE_KEY=eyJxxx...
+```
+
+### One-Click Deploy
+
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/yourusername/shree-krishna-properties&env=VITE_SUPABASE_URL,VITE_SUPABASE_ANON_KEY)
+
+### Troubleshooting
+
+**Issue: "Missing Supabase environment variables"**
+- Solution: Ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are set in your environment
+
+**Issue: "Cannot login as admin"**
+- Solution: Run the seed-admin.ts script to create the admin account
+
+**Issue: "Properties not showing"**
+- Solution: Check RLS policies are enabled and admin has created properties
+
+**Issue: "Image upload fails"**
+- Solution: Verify storage bucket 'property-images' exists and has correct policies
+
+## Project Structure
+
+```
+src/
+├── components/         # Reusable components
+│   ├── Login.tsx
+│   ├── Signup.tsx
+│   ├── ImageViewer.tsx
+│   └── PropertyCard.tsx
+├── pages/             # Page components
+│   ├── UserDashboard.tsx
+│   ├── AdminDashboard.tsx
+│   ├── PropertyDetail.tsx
+│   ├── SearchResults.tsx
+│   ├── UserInquiries.tsx
+│   ├── AdminPropertyForm.tsx
+│   └── AdminInquiries.tsx
+├── contexts/          # React contexts
+│   └── AuthContext.tsx
+├── lib/              # Utilities and configuration
+│   ├── supabase.ts
+│   ├── database.types.ts
+│   └── utils.ts
+└── App.tsx           # Main application component
+```
+
+## License
+
+MIT
+
+## Support
+
+For issues or questions, please contact the development team.
