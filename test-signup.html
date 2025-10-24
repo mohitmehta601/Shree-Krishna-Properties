@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Signup</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+    <h1>Test Signup</h1>
+    <div id="result"></div>
+
+    <script>
+        const supabaseUrl = 'https://ldhvlkdpclebeorxfmqp.supabase.co';
+        const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxkaHZsa2RwY2xlYmVvcnhmbXFwIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjA1NjAzMDgsImV4cCI6MjA3NjEzNjMwOH0.gAovgMrRG8tWzAPgmTyXFSMXOgPJCsg2vchP590oYgA';
+
+        const supabase = supabase.createClient(supabaseUrl, supabaseKey);
+
+        async function testSignup() {
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = 'Testing signup...';
+
+            try {
+                const { data, error } = await supabase.auth.signUp({
+                    email: `test${Date.now()}@example.com`,
+                    password: 'Test@1234',
+                    options: {
+                        data: {
+                            name: 'Test User',
+                            mobile: '1234567890',
+                            address: 'Test Address',
+                            is_admin: false
+                        }
+                    }
+                });
+
+                if (error) {
+                    resultDiv.innerHTML = `<pre style="color: red;">Error: ${JSON.stringify(error, null, 2)}</pre>`;
+                } else {
+                    resultDiv.innerHTML = `<pre style="color: green;">Success: ${JSON.stringify(data, null, 2)}</pre>`;
+                }
+            } catch (err) {
+                resultDiv.innerHTML = `<pre style="color: red;">Exception: ${err.message}\n${err.stack}</pre>`;
+            }
+        }
+
+        testSignup();
+    </script>
+</body>
+</html>
